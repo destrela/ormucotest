@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request
 import mysql.connector
+import os
 
 app = Flask("Cats or Dogs")
 
 insert_clause = "INSERT INTO catsordogs (name, color, pet) VALUES (%s, %s, %s)"
-
+config = {'user': os.getenv('COD_USER'), 'password': os.getenv('COD_PASSWORD'), 'host': os.getenv('COD_HOST'), 'database': os.getenv('COD_DATABASE')}
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -12,7 +13,7 @@ def index():
 @app.route('/', methods=['POST'])
 def insertData():
     form_data = (request.form['name'], request.form['color'], request.form['pet'])
-    con = mysql.connector.connect(user='daniel', password='Helo#2009#Isa', host='127.0.0.1', database='catsordogs')
+    con = mysql.connector.connect(user=config['user'], password=config['password'], host=config['host'], database=config['database'])
     cursor = con.cursor()
     cursor.execute(insert_clause, form_data)
     con.commit()
