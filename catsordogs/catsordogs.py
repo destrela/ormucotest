@@ -2,7 +2,10 @@ from flask import Flask, render_template, request
 import mysql.connector
 import os
 
-app = Flask("Cats or Dogs")
+app_path = os.path.dirname(os.path.abspath(__file__))
+template_path=os.path.join(app_path, 'templates')
+
+app = Flask("Cats or Dogs", template_folder=template_path)
 
 insert_clause = "INSERT INTO catsordogs (name, color, pet) VALUES (%s, %s, %s)"
 config = {'user': os.getenv('COD_USER'), 'password': os.getenv('COD_PASSWORD'), 'host': os.getenv('COD_HOST'), 'database': os.getenv('COD_DATABASE')}
@@ -23,4 +26,4 @@ def insertData():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
