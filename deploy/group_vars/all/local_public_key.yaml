@@ -1,1 +1,2 @@
-PUBLIC_KEY: '/Work/daniel/.ssh/id_rsa.pub'
+PUBLIC_KEY: 'key_files/id_rsa_ormuco.pub'
+SSH_PRIVATE_KEY: '~/id_rsa_ormuco'
