@@ -1,0 +1,8 @@
+CREATE DATABASE IF NOT EXISTS {{ COD_DATABASE }};
+GRANT ALL PRIVILEGES ON {{ COD_DATABASE }}.* TO '{{ COD_USER }}'@'%' IDENTIFIED BY '{{ COD_PASSWORD }}';
+USE {{ COD_DATABASE }};
+CREATE TABLE IF NOT EXISTS catsordogs (
+		name varchar(255) NOT NULL UNIQUE,
+		color varchar(100),
+		pet varchar(5)
+);

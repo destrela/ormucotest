@@ -1,0 +1,17 @@
+server {
+		listen 80 default_server;
+		server_name _;
+		return 301 https://$host$request_uri;
+}
+
+server {
+		listen 443 ssl;
+		server_name {{ hostvars['localhost']['ec2']['instances'][0]['public_dns_name'] }};
+		ssl_certificate {{ ssl_certificate_path }}{{ ssl_certificate }};
+		ssl_certificate_key {{ ssl_certificate_path }}{{ ssl_certificate_key }};
+
+		location / {
+				include uwsgi_params;
+				uwsgi_pass unix:{{ remote_app_path }}catsordogs.sock;
+		}
+}

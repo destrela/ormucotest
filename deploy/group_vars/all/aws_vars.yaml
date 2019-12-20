@@ -1,0 +1,3 @@
+AWS_REGION: 'us-east-1'
+AMI_BASE: 'ami-0ebb652e41c8f97fc'
+AWS_ZONE: 'us-east-1a'

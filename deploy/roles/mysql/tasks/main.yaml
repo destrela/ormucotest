@@ -1,0 +1,22 @@
+- name: install mariadb
+  package:
+    name: 
+      - mariadb
+      - mariadb-server
+    state: present
+
+- name: copy sql file for creating database and user
+  template:
+    src: init.sql.j2
+    dest: /tmp/init.sql
+
+- name: enable and start service
+  service:
+    name: mariadb
+    state: started
+    enabled: true
+
+- name: executing init.sql
+  shell: 'mysql < /tmp/init.sql'
+
+

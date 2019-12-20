@@ -1,0 +1,3 @@
+ssl_certificate_path: /etc/private/
+ssl_certificate: catsordogs.crt
+ssl_certificate_key: catsordogs.key

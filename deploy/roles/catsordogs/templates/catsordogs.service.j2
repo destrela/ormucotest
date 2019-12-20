@@ -1,0 +1,15 @@
+[Unit]
+Description=CatsOrDogs application, served by uWSGI server
+After=network.target
+
+[Service]
+Environment=COD_USER={{ COD_USER }}
+Environment=COD_PASSWORD={{ COD_PASSWORD }}
+Environment=COD_DATABASE={{ COD_DATABASE }}
+Environment=COD_HOST={{ COD_HOST }}
+User=ormuco
+WorkingDirectory={{ remote_app_path }}
+ExecStart=/usr/local/bin/uwsgi --ini=catsordogs.ini
+
+[Install]
+WantedBy=multi-user.target

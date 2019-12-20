@@ -1,0 +1,33 @@
+- name: get vpc_subnet id
+  ec2_vpc_subnet_info:
+    filters:
+      availability-zone: '{{ AWS_ZONE }}'
+  register: vpc_subnet
+
+- name: create catsordogs ec2
+  ec2:
+    key_name: ec2_keys
+    count_tag:
+      Name: catsordogs
+    exact_count: 1
+    instance_type: t2.micro
+    image: '{{ AMI_BASE }}'
+    assign_public_ip: true
+    vpc_subnet_id: '{{ vpc_subnet.subnets[0].subnet_id }}'
+    wait: true
+    instance_tags:
+      Name: catsordogs
+
+- name: create mysql ec2
+  ec2:
+    key_name: ec2_keys
+    count_tag:
+      Name: mysql
+    exact_count: 1
+    instance_type: t2.micro
+    image: '{{ AMI_BASE }}'
+    assign_public_ip: true
+    vpc_subnet_id: '{{ vpc_subnet.subnets[0].subnet_id }}'
+    wait: true
+    instance_tags:
+      Name: mysql

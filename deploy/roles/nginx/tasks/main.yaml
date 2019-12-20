@@ -1,0 +1,58 @@
+- name: Adding Nginx repository
+  yum_repository:
+    name: nginx-stable
+    description: Nginx stable repository
+    baseurl: http://nginx.org/packages/centos/$releasever/$basearch/
+    gpgcheck: yes
+    enabled: yes
+    gpgkey: https://nginx.org/keys/nginx_signing.key
+  tags:
+    - nginx
+
+- name: Installing Nginx
+  yum:
+    name: nginx
+    state: present
+  tags:
+    - nginx
+
+- name: Creating site configuration file
+  template:
+    src: catsordogs.conf.j2
+    dest: /etc/nginx/conf.d/catsordogs.conf
+  notify: restart nginx
+  tags:
+    - nginx
+
+- name: Creating a directory to hold certificate and certificate.key
+  file:
+    path: '{{ ssl_certificate }}'
+    state: directory
+  tags:
+    - nginx
+
+- name: Copy certificate key to server
+  copy:
+    src: '{{ item }}'
+    dest: '{{ ssl_certificate_path }}'
+    mode: 0400
+    owner: nginx
+    group: nginx
+  loop:
+    - '{{ ssl_certificate }}'
+    - '{{ ssl_certificate_key }}'
+  tags:
+    - nginx
+
+- name: Assuring nginx service is enabled and started
+  systemd:
+    name: nginx
+    state: started
+    enabled: true
+  tags:
+    - nginx
+
+- name: Relabel socket file to the correct SELinux context
+  shell: semanage fcontext -a -t httpd_sys_rw_content_t {{ remote_app_path }}catsordogs.sock; restorecon -v '{{remote_app_path}}catsordogs.sock'
+  tags:
+    - nginx

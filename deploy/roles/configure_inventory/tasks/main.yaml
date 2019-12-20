@@ -1,0 +1,16 @@
+- name: get the instances fact
+  ec2_instance_info:
+    filters:
+      instance-state-name: running
+  register: ec2
+  tags:
+    - configure_inventory
+
+- name: add hosts to inventory
+  add_host:
+    hostname: '{{ item.public_ip_address }}'
+    groupname: '{{ item.tags.Name }}'
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+  loop: '{{ ec2.instances }}'
+  tags:
+    - configure_inventory

@@ -1,0 +1,64 @@
+- name: Installing applications dependencies
+  yum:
+    name:
+      - python3
+      - python3-devel
+      - python3-pip
+      - gcc
+    state: present
+  tags:
+    - catsordogs
+
+- name: Instaling python modules dependencies
+  pip:
+    name:
+      - flask
+      - mysql-connector-python
+      - uWSGI
+    executable: /usr/bin/pip3
+  tags:
+    - catsordogs
+
+- name: Creating service user ormuco
+  user:
+    name: ormuco
+    system: true
+  tags:
+    - catsordogs
+
+- name: Copying catsordogs application to http server
+  copy:
+    src: '{{ local_app_path }}'
+    dest: '{{ remote_app_path }}'
+    owner: ormuco
+  tags: 
+    - catsordogs
+    - copy_catsordogs
+
+- name: Creating systemd service file
+  template:
+    src: catsordogs.service.j2
+    dest: /usr/lib/systemd/system/catsordogs.service
+  vars:
+    COD_HOST: "{{ hostvars[groups['mysql'][0]]['ansible_default_ipv4']['address'] }}"
+  tags:
+    - catsordogs
+
+- name: Assuring service is enabled and started
+  systemd:
+    name: catsordogs
+    daemon_reload: true
+    state: started
+    enabled: true
+  tags:
+    - catsordogs
+
+      #- name: Starting the application
+      #  shell: cd {{ remote_app_path }} && uwsgi --ini=castsordogs.ini
+      #  environment:
+      #    - COD_USER: '{{ COD_USER }}'
+      #    - COD_PASSWORD: '{{ COD_PASSWORD }}'
+      #    - COD_DATABASE: '{{ COD_DATABASE }}'
+      #    - COD_HOST: "{{ hostvars[groups['mysql'][0]]['ansible_default_ipv4']['address'] }}"
+      #  tags: 
+      #    - catsordogs

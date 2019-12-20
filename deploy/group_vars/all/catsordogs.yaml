@@ -1,0 +1,2 @@
+local_app_path: '{{ role_path }}/../../../catsordogs/'
+remote_app_path: '/opt/apps/catsordogs/'

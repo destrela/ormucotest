@@ -1,0 +1,57 @@
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: creating ec2 keypair
+      ec2_key:
+        name: ec2_keys
+        key_material: "{{ lookup('file', PUBLIC_KEY) }}"
+      tags:
+        - keypair
+    - name: creating ec2 instances
+      import_role:
+        name: make_ec2
+      tags:
+        - make_ec2
+    - name: adding ec2 instances to the in memory inventory
+      import_role:
+        name: configure_inventory
+      tags:
+        - configure_inventory
+        - mysql
+        - catsordogs
+  environment:
+    - AWS_ACCESS_KEY: '{{ AWS_ACCESS_KEY_ID }}'
+    - AWS_SECRET_KEY: '{{ AWS_SECRET_ACCESS_KEY }}'
+    - AWS_REGION: '{{ AWS_REGION }}' 
+
+- hosts: mysql
+  user: centos
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: waiting for connection
+      wait_for_connection:
+    - name: Gathering facts
+      gather_facts:
+    - name: configuring mysql
+      import_role:
+        name: mysql
+      tags:
+        - mysql
+
+- hosts: catsordogs
+  user: centos
+  become: yes
+  tasks:
+    - name: waiting for connection
+      wait_for_connection:
+    - name: configuring the application
+      import_role:
+        name: catsordogs
+      tags:
+        - catsordogs
+    - name: installing Nginx
+      import_role:
+        name: nginx
+      tags:
+        - catsordogs
