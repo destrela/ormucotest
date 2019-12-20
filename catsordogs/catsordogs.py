@@ -18,7 +18,10 @@ def insertData():
     form_data = (request.form['name'], request.form['color'], request.form['pet'])
     con = mysql.connector.connect(user=config['user'], password=config['password'], host=config['host'], database=config['database'])
     cursor = con.cursor()
-    cursor.execute(insert_clause, form_data)
+    try:
+        cursor.execute(insert_clause, form_data)
+    except mysql.connector.errors.IntegrityError as e:
+        return render_template('insert_error.html', error_msg=e)
     con.commit()
     cursor.close()
     con.close()
