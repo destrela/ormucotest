@@ -26,7 +26,6 @@
 	- Other to configure MySQL server
 	- And other to configure the http/application server
 - All variables that contain sensitive information, such AWS_SECRET_ACCESS_KEY, COD_PASSWD, etc. are in files protected by ansible vault
-- The ansible vault password is **ormucopass**
 - The file protected by ansible-vault are:
 	- deploy/group_vars/all/aws_vars.yaml
 	- deploy/group_vars/all/keys.yaml
