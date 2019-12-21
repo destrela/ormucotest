@@ -11,6 +11,7 @@
   - name
 	- color
 	- pet
+- The application can be reached in http://54.89.155.236
 
 ## Infrastructure
 - The application is served by a uwsgi server
@@ -37,7 +38,7 @@
 
 ## Instances
 - The ip addresses of the two instance already created are:
-	- catsordogs: 54.160.155.55
-	- mysql: 54.242.185.191
+	- catsordogs: 54.89.155.236
+	- mysql: 174.129.114.229
 
 
