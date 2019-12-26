@@ -11,6 +11,7 @@
   - name
 	- color
 	- pet
+- The application can be reached in http://54.89.155.236
 
 ## Infrastructure
 - The application is served by a uwsgi server
