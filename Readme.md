@@ -25,7 +25,6 @@
 	- Other to configure MySQL server
 	- And other to configure the http/application server
 - All variables that contain sensitive information, such AWS_SECRET_ACCESS_KEY, COD_PASSWD, etc. are in files protected by ansible vault
-- The ansible vault password is **ormucopass**
 - The file protected by ansible-vault are:
 	- deploy/group_vars/all/aws_vars.yaml
 	- deploy/group_vars/all/keys.yaml
@@ -37,7 +36,7 @@
 
 ## Instances
 - The ip addresses of the two instance already created are:
-	- catsordogs: 54.160.155.55
-	- mysql: 54.242.185.191
+	- catsordogs: 54.89.155.236
+	- mysql: 174.129.114.229
 
 
